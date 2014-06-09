@@ -6,7 +6,7 @@ namespace Assets.Scripts
     {
         public float JumpHeight = 500;
 
-        void Update ()
+        void Update()
         {
             if (InputManager.IsKeyDownOrTouch(KeyCode.Space))
             {
