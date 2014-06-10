@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -7,20 +8,28 @@ namespace Assets.Scripts
         public float MaxBombDelay = 1;
         public float CurrentBombDelay = 1;
 
-        void Update()
+        public float MaxFetusDelay = 5;
+        public float CurrentFetusDelay = 5;
+
+        public List<Spawner> Spawners = new List<Spawner>(); 
+
+        void Start()
         {
-            UpdateBombs();
+            Spawners.Add(new Spawner("Prefabs/PurpleBomb", .8f, 1.2f, this));
+            Spawners.Add(new Spawner("Prefabs/Fetus", 5, 10, this));
         }
 
-        private void UpdateBombs()
+        void Update()
         {
-            CurrentBombDelay -= Time.deltaTime;
-            if (CurrentBombDelay <= 0)
+            foreach (var spawner in Spawners)
             {
-                var p = (GameObject) Instantiate(Resources.Load("Prefabs/PurpleBomb"));
-                p.transform.position += new Vector3(19, Random.Range(-9f, 9f), 0);
-                CurrentBombDelay = MaxBombDelay;
+                spawner.Update();
             }
+        }
+
+        public GameObject Spawn(string prefab)
+        {
+            return (GameObject) Instantiate(Resources.Load(prefab));
         }
     }
 }

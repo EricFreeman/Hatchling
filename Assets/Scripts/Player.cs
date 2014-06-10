@@ -4,15 +4,15 @@ namespace Assets.Scripts
 {
     public class Player : MonoBehaviour
     {
-        public float JumpHeight = 500;
+        public float PlayerSpeed = 10;
+
+        public Transform Tail;
 
         void Update()
         {
-            if (InputManager.IsKeyDownOrTouch(KeyCode.Space))
-            {
-                transform.rigidbody2D.velocity = Vector2.zero;
-                transform.rigidbody2D.AddForce(new Vector2(0, JumpHeight));
-            }
+            var xSpd = Input.GetAxisRaw("Horizontal");
+            var ySpd = Input.GetAxisRaw("Vertical");
+            transform.Translate(new Vector2(xSpd, ySpd) * PlayerSpeed * Time.deltaTime);
         }
     }
 }
