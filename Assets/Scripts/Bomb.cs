@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -10,6 +9,8 @@ namespace Assets.Scripts
 
         public bool DestroyFlag = false;
 
+        public float ExplosionSpeed = 450;
+
         void Update()
         {
             transform.Translate(Vector3.left * BombSpeed * Time.deltaTime);
@@ -17,9 +18,26 @@ namespace Assets.Scripts
             if(DestroyFlag) DestroyImmediate(gameObject);
         }
 
-        void OnTriggerEnter2D()
+        void OnTriggerEnter2D(Collider2D c)
         {
             DestroyFlag = true;
+            Explode(c.transform);
+        }
+
+        private void Explode(Transform t)
+        {
+            t.parent = null;
+            if(t.GetComponent<Rigidbody2D>() == null)
+                t.gameObject.AddComponent<Rigidbody2D>();
+
+            t.rigidbody2D.AddForce(new Vector2(
+                Random.Range(-ExplosionSpeed, ExplosionSpeed),
+                Random.Range(0, ExplosionSpeed)));
+
+            foreach (Transform child in t)
+            {
+                Explode(child);
+            }
         }
     }
 }
