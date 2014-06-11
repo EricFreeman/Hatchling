@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -30,7 +31,8 @@ namespace Assets.Scripts
                 Random.Range(-ExplosionSpeed, ExplosionSpeed),
                 Random.Range(0, ExplosionSpeed)));
 
-            foreach (Transform child in t)
+            // Have to do skip(1) because GetComponentsInChildren ALSO returns the component from the object itself.  Very misleading method name.
+            foreach (Transform child in t.GetComponentsInChildren<Transform>().ToList().Skip(1))
             {
                 Explode(child);
             }
