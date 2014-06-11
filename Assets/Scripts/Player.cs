@@ -10,6 +10,7 @@ namespace Assets.Scripts
         public Transform Tail;
 
         private List<string> _parts;
+        private Dictionary<string, Vector3> _pos = new Dictionary<string, Vector3>(); 
 
         void Start()
         {
@@ -18,6 +19,13 @@ namespace Assets.Scripts
                 "Head", "Neck", "Neck2", "Neck3", "Chest", 
                 "Shoulder", "Chest2", "Body1", "Body2", "Tail1"
             };
+
+            foreach (var part in _parts)
+            {
+                var p = GameObject.Find(part);
+                if (p != null)
+                    _pos.Add(part, p.transform.localPosition);
+            }
         }
 
         void Update()
@@ -34,17 +42,14 @@ namespace Assets.Scripts
                 var obj = GameObject.Find(_parts[i]);
                 if (obj != null)
                 {
-                    Debug.Log("Found obj");
-                    if (obj.transform.parent == null)
+                    if (obj.transform.parent == null && obj.name != "Head")
                     {
                         var parent = GameObject.Find(_parts[i - 1]);
                         if (parent != null)
                         {
                             obj.transform.parent = parent.transform;
                             Destroy(obj.rigidbody2D);
-
-                            //TODO: Store position of prefab items before dragon is destroyed.  Then place them correctly here!
-                            obj.transform.position = parent.transform.position;
+                            obj.transform.position = parent.transform.position - _pos[_parts[i]];
                         }
                     }
                 }
