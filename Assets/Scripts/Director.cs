@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class Director : MonoBehaviour
     {
-        public float MaxBombDelay = 1;
-        public float CurrentBombDelay = 1;
-
-        public float MaxFetusDelay = 5;
-        public float CurrentFetusDelay = 5;
+        public int Points { get; set; }
+        public Transform Player;
+        public int Multiplier
+        {
+            get { return Player.GetComponentsInChildren<Transform>().Count(); }
+        }
 
         public List<Spawner> Spawners = new List<Spawner>(); 
 
@@ -22,14 +24,20 @@ namespace Assets.Scripts
         void Update()
         {
             foreach (var spawner in Spawners)
-            {
                 spawner.Update();
-            }
+
+            Debug.Log("Points: " + Points);
+            Debug.Log("Multip: " + Multiplier);
         }
 
         public GameObject Spawn(string prefab)
         {
             return (GameObject) Instantiate(Resources.Load(prefab));
+        }
+
+        public void AddPoints(int points)
+        {
+            Points += (points * Multiplier);
         }
     }
 }

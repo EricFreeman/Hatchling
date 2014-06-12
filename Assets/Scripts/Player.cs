@@ -8,11 +8,14 @@ namespace Assets.Scripts
     {
         public float PlayerSpeed = 10;
         public Transform Tail;
+        private Director _dir;
 
         private List<DragonPart> _parts = new List<DragonPart>();
 
         void Start()
         {
+            _dir = GameObject.Find("Director").GetComponent<Director>();
+
             var part = GameObject.Find("Head").transform;
             foreach (Transform child in part.GetComponentsInChildren<Transform>())
             {

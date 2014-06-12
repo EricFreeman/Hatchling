@@ -7,8 +7,13 @@ namespace Assets.Scripts
     {
         public float BombDamage = 1;
         public float ExplosionSpeed = 450;
-
         public bool DestroyFlag = false;
+        public Director _dir;
+
+        void Start()
+        {
+            _dir = GameObject.Find("Director").GetComponent<Director>();
+        }
 
         void Update()
         {
