@@ -37,7 +37,7 @@ namespace Assets.Scripts
 
         public void AddPart()
         {
-            for (var i = _parts.Count - 1; i >= 0; i--)
+            for (var i = 0; i < _parts.Count; i++)
             {
                 var obj = GameObject.Find(_parts[i]);
                 if (obj != null)
@@ -49,7 +49,8 @@ namespace Assets.Scripts
                         {
                             obj.transform.parent = parent.transform;
                             Destroy(obj.rigidbody2D);
-                            obj.transform.position = parent.transform.position - _pos[_parts[i]];
+                            obj.transform.position = parent.transform.position - _pos[_parts[i]] + new Vector3(0, parent.transform.localPosition.y, 0);
+                            break;
                         }
                     }
                 }
