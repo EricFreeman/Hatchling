@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Assets.Scripts.Models;
 using UnityEngine;
 
@@ -14,20 +13,16 @@ namespace Assets.Scripts
 
         void Start()
         {
-            LoadParts(GameObject.Find("Head").transform);
-        }
-
-        private void LoadParts(Transform part)
-        {
-           _parts.Add(new DragonPart
-           {
-               Part = part,
-               Parent = part.parent,
-               StartPosition = part.localPosition
-           });
-
-           foreach (Transform child in part.GetComponentsInChildren<Transform>().ToList().Skip(1))
-               LoadParts(child);
+            var part = GameObject.Find("Head").transform;
+            foreach (Transform child in part.GetComponentsInChildren<Transform>())
+            {
+                _parts.Add(new DragonPart
+                {
+                    Part = child,
+                    Parent = child.parent,
+                    StartPosition = new Vector3(child.localPosition.x, child.localPosition.y * -1, 0)
+                });
+            }
         }
 
         void Update()
@@ -42,13 +37,11 @@ namespace Assets.Scripts
             foreach (var part in _parts)
             {
                 var obj = part.Part;
-                if (obj.transform.parent == null && obj.name != "Head")
+                if (obj.parent == null && obj.name != "Head")
                 {
                     obj.transform.parent = part.Parent;
                     Destroy(obj.rigidbody2D);
-                    obj.transform.position = part.Parent.transform.position 
-                                            - part.StartPosition 
-                                            + new Vector3(0, part.Parent.transform.localPosition.y, 0);
+                    obj.transform.position = part.Parent.position - part.StartPosition;
                     break;
                 }
             }
