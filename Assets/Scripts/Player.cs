@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Models;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -9,23 +10,24 @@ namespace Assets.Scripts
         public float PlayerSpeed = 10;
         public Transform Tail;
 
-        private List<string> _parts;
-        private Dictionary<string, Vector3> _pos = new Dictionary<string, Vector3>(); 
+        private List<DragonPart> _parts = new List<DragonPart>();
 
         void Start()
         {
-            _parts = new List<string>
-            {
-                "Head", "Neck", "Neck2", "Neck3", "Chest", 
-                "Shoulder", "Chest2", "Body1", "Body2", "Tail1"
-            };
+            LoadParts(GameObject.Find("Head").transform);
+        }
 
-            foreach (var part in _parts)
-            {
-                var p = GameObject.Find(part);
-                if (p != null)
-                    _pos.Add(part, p.transform.localPosition);
-            }
+        private void LoadParts(Transform part)
+        {
+           _parts.Add(new DragonPart
+           {
+               Part = part,
+               Parent = part.parent,
+               StartPosition = part.localPosition
+           });
+
+           foreach (Transform child in part.GetComponentsInChildren<Transform>().ToList().Skip(1))
+               LoadParts(child);
         }
 
         void Update()
@@ -37,22 +39,17 @@ namespace Assets.Scripts
 
         public void AddPart()
         {
-            for (var i = 0; i < _parts.Count; i++)
+            foreach (var part in _parts)
             {
-                var obj = GameObject.Find(_parts[i]);
-                if (obj != null)
+                var obj = part.Part;
+                if (obj.transform.parent == null && obj.name != "Head")
                 {
-                    if (obj.transform.parent == null && obj.name != "Head")
-                    {
-                        var parent = GameObject.Find(_parts[i - 1]);
-                        if (parent != null)
-                        {
-                            obj.transform.parent = parent.transform;
-                            Destroy(obj.rigidbody2D);
-                            obj.transform.position = parent.transform.position - _pos[_parts[i]] + new Vector3(0, parent.transform.localPosition.y, 0);
-                            break;
-                        }
-                    }
+                    obj.transform.parent = part.Parent;
+                    Destroy(obj.rigidbody2D);
+                    obj.transform.position = part.Parent.transform.position 
+                                            - part.StartPosition 
+                                            + new Vector3(0, part.Parent.transform.localPosition.y, 0);
+                    break;
                 }
             }
         }
