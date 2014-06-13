@@ -34,8 +34,6 @@ namespace Assets.Scripts
             var ySpd = Input.GetAxisRaw("Vertical");
             transform.Translate(new Vector2(xSpd, ySpd) * PlayerSpeed * Time.deltaTime);
 
-            //-9 16
-
             if(transform.position.y > 6) transform.position -= new Vector3(0, transform.position.y - 6, 0);
             if(transform.position.y < -6) transform.position += new Vector3(0, -1 * transform.position.y - 6, 0);
 
