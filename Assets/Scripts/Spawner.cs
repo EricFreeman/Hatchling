@@ -26,7 +26,7 @@ namespace Assets.Scripts
             if (CurrentSpawnDelay <= 0)
             {
                 var p = Director.Spawn(Prefab);
-                p.transform.position += new Vector3(19, Random.Range(-9f, 9f), 0);
+                p.transform.position += new Vector3(19, Random.Range(-6f, 6f), 0);
                 CurrentSpawnDelay = Random.Range(MinSpawnDelay, MaxSpawnDelay);
             }
         }
