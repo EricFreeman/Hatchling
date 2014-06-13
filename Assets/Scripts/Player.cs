@@ -33,6 +33,9 @@ namespace Assets.Scripts
             var xSpd = Input.GetAxisRaw("Horizontal");
             var ySpd = Input.GetAxisRaw("Vertical");
             transform.Translate(new Vector2(xSpd, ySpd) * PlayerSpeed * Time.deltaTime);
+
+            if(transform.position.y > 6) transform.position -= new Vector3(0, transform.position.y - 6, 0);
+            if(transform.position.y < -6) transform.position += new Vector3(0, -1 * transform.position.y - 6, 0);
         }
 
         public void AddPart()
