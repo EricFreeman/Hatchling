@@ -19,17 +19,14 @@ namespace Assets.Scripts
 
         private void OnTriggerEnter2D(Collider2D c)
         {
-            if (!DestroyFlag)
+            var p = GameObject.Find("Player");
+            if (p != null)
             {
-                var p = GameObject.Find("Player");
-                if (p != null)
-                {
-                    p.GetComponent<Player>().AddPart();
-                    _dir.AddPoints(1);
-                }
-
-                DestroyFlag = true;
+                p.GetComponent<Player>().AddPart();
+                _dir.AddPoints(1);
             }
+
+            DestroyFlag = true;
         }
     }
 }

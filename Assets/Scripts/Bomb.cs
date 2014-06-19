@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -8,12 +9,10 @@ namespace Assets.Scripts
         public float ExplosionSpeed = 450;
         public bool DestroyFlag = false;
         public Director _dir;
-        public Player _player;
 
         void Start()
         {
             _dir = GameObject.Find("Director").GetComponent<Director>();
-            _player = GameObject.Find("Player").GetComponent<Player>();
         }
 
         void Update()
@@ -23,10 +22,24 @@ namespace Assets.Scripts
 
         void OnTriggerEnter2D(Collider2D c)
         {
-            if (!DestroyFlag)
+            DestroyFlag = true;
+            Explode(c.transform);
+        }
+
+        private void Explode(Transform t)
+        {
+            t.parent = null;
+            if(t.GetComponent<Rigidbody2D>() == null)
+                t.gameObject.AddComponent<Rigidbody2D>();
+
+            t.rigidbody2D.AddForce(new Vector2(
+                Random.Range(-ExplosionSpeed, ExplosionSpeed),
+                Random.Range(0, ExplosionSpeed)));
+
+            // Have to do skip(1) because GetComponentsInChildren ALSO returns the component from the object itself.  Very misleading method name.
+            foreach (Transform child in t.GetComponentsInChildren<Transform>().ToList().Skip(1))
             {
-                DestroyFlag = true;
-                _player.Explode(c.transform, 450);
+                Explode(child);
             }
         }
     }

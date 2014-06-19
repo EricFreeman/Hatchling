@@ -17,8 +17,8 @@ namespace Assets.Scripts
 
         void Start()
         {
-            Spawners.Add(new Spawner("Prefabs/PurpleBomb", 2, 3, this));
-            Spawners.Add(new Spawner("Prefabs/Fetus", 2, 3, this));
+            Spawners.Add(new Spawner("Prefabs/PurpleBomb", .8f, 1.2f, this));
+            Spawners.Add(new Spawner("Prefabs/Fetus", 5, 10, this));
         }
 
         void Update()
@@ -26,8 +26,8 @@ namespace Assets.Scripts
             foreach (var spawner in Spawners)
                 spawner.Update();
 
-//            Debug.Log("Points: " + Points);
-//            Debug.Log("Multip: " + Multiplier);
+            Debug.Log("Points: " + Points);
+            Debug.Log("Multip: " + Multiplier);
         }
 
         public GameObject Spawn(string prefab)
