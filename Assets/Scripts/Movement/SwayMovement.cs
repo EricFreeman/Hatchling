@@ -11,6 +11,8 @@ namespace Assets.Scripts.Movement
 
         public float startOffset { get; set; }
 
+        public Vector3 swayOffset { get; set; }
+
         void Start()
         {
             startOffset = transform.position.x;
@@ -20,7 +22,9 @@ namespace Assets.Scripts.Movement
         {
             angle += speed * Time.deltaTime;
             if (angle > 360) angle -= 360;
-            transform.position += new Vector3(0, maxUpDown * Mathf.Sin(angle * toDegrees + startOffset), 0);
+            var offset = new Vector3(0, maxUpDown*Mathf.Sin(angle*toDegrees + startOffset), 0);
+            transform.position += offset;
+            swayOffset += offset;
         }
     }
 }
